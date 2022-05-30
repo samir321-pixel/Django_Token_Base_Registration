@@ -1,29 +1,14 @@
-from django.db.models import Q # for queries
+from django.db.models import Q  # for queries
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
-from .models import User
+from .models import *
 from django.core.exceptions import ValidationError
 from uuid import uuid4
 
 
 class UserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(
-        required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
-        )
-    username = serializers.CharField(
-        required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())]
-        )
-    password = serializers.CharField(max_length=8)
-
     class Meta:
         model = User
-        fields = (
-            'username',
-            'email',
-            'password'
-        )
+        fields = ['username', 'first_name', 'last_name', 'age', 'email']
 
 
 class UserLoginSerializer(serializers.ModelSerializer):
@@ -44,7 +29,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
             user = User.objects.filter(
                 Q(email=user_id) &
                 Q(password=password)
-                ).distinct()
+            ).distinct()
             if not user.exists():
                 raise ValidationError("User credentials are not correct.")
             user = User.objects.get(email=user_id)
@@ -66,11 +51,7 @@ class UserLoginSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = (
-            'user_id',
-            'password',
-            'token',
-        )
+        fields = '__all__'
 
         read_only_fields = (
             'token',
@@ -99,7 +80,4 @@ class UserLogoutSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = (
-            'token',
-            'status',
-        )
+        fields = '__all__'
