@@ -35,7 +35,7 @@ Markdown==3.0.1
 mccabe==0.6.1
 oauthlib==2.1.0
 Pillow==7.0.0
-pipenv==2018.11.26
+pipenv==2022.1.8
 psycopg2==2.8.4
 pylint==2.7.0
 python-crontab==2.4.0
